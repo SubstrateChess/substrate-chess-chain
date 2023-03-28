@@ -14,3 +14,9 @@
 
 # direnv cache
 .direnv
+
+# IDE
+.idea
+
+# development pallets
+pallets
