@@ -1,6 +1,6 @@
 use node_template_runtime::{
-	AccountId, AuraConfig, AssetsConfig, BalancesConfig, GenesisConfig, GrandpaConfig, Signature, SudoConfig,
-	SystemConfig, WASM_BINARY,
+	AccountId, AssetsConfig, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, Signature,
+	SudoConfig, SystemConfig, WASM_BINARY,
 };
 use sc_service::ChainType;
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
@@ -124,6 +124,9 @@ pub fn local_testnet_config() -> Result<ChainSpec, String> {
 	))
 }
 
+const ASSET_ID: u32 = 200u32;
+const ASSET_MIN_BALANCE: u64 = 1_000u64;
+
 /// Configure initial storage state for FRAME modules.
 fn testnet_genesis(
 	wasm_binary: &[u8],
@@ -152,6 +155,20 @@ fn testnet_genesis(
 			key: Some(root_key),
 		},
 		transaction_payment: Default::default(),
-		assets: AssetsConfig { assets: vec![], accounts: vec![], metadata: vec![] },
+		assets: AssetsConfig {
+			assets: vec![
+				// id, owner, is_sufficient, min_balance
+				(ASSET_ID, frame_benchmarking::account("Alice", 0, 0), true, ASSET_MIN_BALANCE.into()),
+			],
+			metadata: vec![
+				// id, name, symbol, decimals
+				(ASSET_ID, "Token Name".into(), "TOKEN".into(), 10),
+			],
+			accounts: vec![
+				// id, account_id, balance
+				(ASSET_ID, frame_benchmarking::account("Alice", 0, 0), (ASSET_MIN_BALANCE * 100).into()),
+				(ASSET_ID, frame_benchmarking::account("Bob", 0, 1), (ASSET_MIN_BALANCE * 100).into()),
+			],
+		},
 	}
 }
