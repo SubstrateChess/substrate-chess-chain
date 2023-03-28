@@ -278,6 +278,7 @@ parameter_types! {
 	pub const RapidPeriod: u32 = 150;
 	pub const DailyPeriod: u32 = 14400;
 	pub const ChessPalletId: PalletId = PalletId(*b"subchess");
+	pub const IncentiveShare: u8 = 10; // janitor gets 10% of the prize
 }
 
 pub type AssetBalance = Balance;
@@ -292,6 +293,7 @@ impl pallet_chess::Config for Runtime {
 	type BlitzPeriod = BlitzPeriod;
 	type RapidPeriod = RapidPeriod;
 	type DailyPeriod = DailyPeriod;
+	type IncentiveShare = IncentiveShare;
 }
 
 impl pallet_assets::Config for Runtime {
